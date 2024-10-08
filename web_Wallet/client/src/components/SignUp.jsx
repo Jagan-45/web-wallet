@@ -26,7 +26,8 @@ export default function Signup() {
     console.log('hello')
     try {
       console.log('block')
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch('https://web-wallet-backend.onrender.com/api/auth/register', {
+        // mode:'no-cors',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
