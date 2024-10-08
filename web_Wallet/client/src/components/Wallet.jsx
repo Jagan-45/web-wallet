@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Copy, Send, Plus, ChevronDown, X, ChevronRight } from 'lucide-react'
 import useWalletGenerator from '../hooks/useWalletGenerator'
  import useWalletActions from '../hooks/useWalletActions'
- import { decryptPrivateKey } from '../hooks/useWalletActions'
+ import { decryptPrivateKey ,airdropSol,requestSepoliaFaucet} from '../hooks/useWalletActions'
 import { on } from 'events'
 import { toast } from 'react-toastify'
 
@@ -57,8 +57,10 @@ const SendModal = ({ isOpen, onClose, wallet, index,type,onBalanceUpdate }) => {
     const hashedPassword=localStorage.getItem('hashedPassword')
     const saltForKey=localStorage.getItem('saltForKey')
     const iv=localStorage.getItem('iv')
-    const walletInfo=localStorage.getItem(`acnt${index}${type==="Etherium"?"ether":type.toLowerCase()}wallet`);
-    console.log(walletInfo)
+    const walletInfo=localStorage.getItem(`acnt${index}${type=="Ethereum"?"ether":type.toLowerCase()}wallet`);
+    // console.log(type)
+    // console.log(`acnt${index}${type=="Etherium"?"ether":type.toLowerCase()}wallet`)
+    // console.log(JSON.parse(walletInfo))
     const encryptedPrivateKey=JSON.parse(walletInfo).encryptedPrivateKey
     // console.log(encryptedPrivateKey)
     // console.log(encryptedPrivateKey)
@@ -66,7 +68,7 @@ const SendModal = ({ isOpen, onClose, wallet, index,type,onBalanceUpdate }) => {
     if(type==='Solana'){
       await sendSolana(decryptedPrivateKey,receiverAddress,amount)
 
-      toast.success("Transaction successfull")
+      // toast.success("Transaction successfull")
       const SenderSolanaBalance=await getSolanaBalance(senderSolanaAddress)
       const ReceiverSolanaBalance=await getSolanaBalance(receiverAddress)
       onBalanceUpdate(SenderSolanaBalance,type)
@@ -75,9 +77,9 @@ const SendModal = ({ isOpen, onClose, wallet, index,type,onBalanceUpdate }) => {
       console.log(SenderSolanaBalance,ReceiverSolanaBalance)
 
 
-    } else if(type==='Etherium'){
+    } else if(type==='Ethereum'){
       await sendEth(decryptedPrivateKey,receiverAddress,amount)
-      toast.success("Transaction successfull")
+      // toast.success("Transaction successfull")
       const SenderEthBalance=await getEthBalance(senderEthAddress)
       const ReceiverEthBalance=await getEthBalance(receiverAddress)
       onBalanceUpdate(SenderEthBalance,type)
@@ -85,6 +87,18 @@ const SendModal = ({ isOpen, onClose, wallet, index,type,onBalanceUpdate }) => {
     }
     // console.log(`Sending ${amount} ${type} to ${receiverAddress}`)
     onClose()
+  }
+
+  const handleAirDrop = async () => {
+    if(type=="Solana"){
+        await airdropSol(senderSolanaAddress,amount)
+        onBalanceUpdate(await getSolanaBalance(senderSolanaAddress),type)
+    }
+    else if(type=="Ethereum"){
+      console.log("hi")
+        await requestSepoliaFaucet(senderEthAddress)
+        onBalanceUpdate(await getEthBalance(senderEthAddress),type)
+    }
   }
 
   return (
@@ -130,7 +144,13 @@ const SendModal = ({ isOpen, onClose, wallet, index,type,onBalanceUpdate }) => {
             />
           </div>
         </div>
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-around">
+          <button
+            onClick={handleAirDrop}
+            className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
+          >
+            Request AirDrop
+          </button>
           <button
             onClick={handleSend}
             className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
@@ -164,7 +184,7 @@ const WalletCard = ({ wallet, index, type }) => {
         if(type=="Solana"){
           setSolBalance(await getSolanaBalance(senderSolanaAddress)) 
         }
-        else if(type=="Etherium"){
+        else if(type=="Ethereum"){
           setEthBalance(await getEthBalance(senderEthAddress))
         }
        
@@ -199,7 +219,7 @@ const WalletCard = ({ wallet, index, type }) => {
   const updateBalance=(newBalance,type)=>{
     if(type=='Solana'){
       setSolBalance(newBalance)
-    } else if(type=='Etherium'){
+    } else if(type=='Ethereum'){
       setEthBalance(newBalance)
     } 
   }

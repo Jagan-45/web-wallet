@@ -18,6 +18,52 @@ export const decryptPrivateKey = (encryptedPrivateKey, hashedPassword, saltForKe
   return decrypted;
 };
 
+export const airdropSol = async (publicKey, amount = 1) => {
+  // setLoading(true);
+  try {
+    const signature = await solConnection.requestAirdrop(new PublicKey(publicKey), 1e9);
+    const latestBlockhash = await solConnection.getLatestBlockhash();
+    await solConnection.confirmTransaction({
+      signature,
+      blockhash: latestBlockhash.blockhash,
+      lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+    });
+    console.log(`Airdrop successful! Signature: ${signature}`);
+    // console.log(await getSolanaBalance(publicKey));
+  } catch (error) {
+    console.error('Error requesting SOL airdrop:', error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+export const requestSepoliaFaucet = async (ethAddress) => {
+  // setLoading(true);
+  try {
+   console.log("this is eth faucet")
+    const response = await fetch('https://faucet.sepolia.dev/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ address: ethAddress }),
+    });
+    const result = await response.json();
+    console.log(result)
+    if (result.success) {
+      console.log(`Sepolia ETH faucet request successful! Transaction: ${result.txHash}`);
+      // await getEthBalance(ethAddress); 
+    } else {
+      console.error('Faucet request failed:', result.message);
+    }
+  } catch (error) {
+    console.error('Error requesting Sepolia ETH from faucet:', error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+
 export default function useWalletActions(senderSolPublicKey, senderEthAddress) {
   const [solanaBalance, setSolanaBalance] = useState(null);
   const [ethBalance, setEthBalance] = useState(null);
@@ -40,49 +86,7 @@ export default function useWalletActions(senderSolPublicKey, senderEthAddress) {
     return ethers.formatEther(balance);
   };
 
-  const airdropSol = async (publicKey, amount = 1) => {
-    setLoading(true);
-    try {
-      const signature = await solConnection.requestAirdrop(new PublicKey(publicKey), 1e9);
-      const latestBlockhash = await solConnection.getLatestBlockhash();
-      await solConnection.confirmTransaction({
-        signature,
-        blockhash: latestBlockhash.blockhash,
-        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-      });
-      console.log(`Airdrop successful! Signature: ${signature}`);
-      await getSolanaBalance(publicKey);
-    } catch (error) {
-      console.error('Error requesting SOL airdrop:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const requestSepoliaFaucet = async (ethAddress) => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://faucet.sepolia.dev/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ address: ethAddress }),
-      });
-      const result = await response.json();
-      if (result.success) {
-        console.log(`Sepolia ETH faucet request successful! Transaction: ${result.txHash}`);
-        await getEthBalance(ethAddress); 
-      } else {
-        console.error('Faucet request failed:', result.message);
-      }
-    } catch (error) {
-      console.error('Error requesting Sepolia ETH from faucet:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
 
   const sendSolana = async (senderPrivateKey, recipientAddress, amount) => {
     setLoading(true);
@@ -113,10 +117,11 @@ export default function useWalletActions(senderSolPublicKey, senderEthAddress) {
   const sendEth = async (senderPrivateKey, recipientAddress, amount) => {
     setLoading(true);
     try {
+
       const wallet = new ethers.Wallet(senderPrivateKey, ethProvider);
       const transaction = await wallet.sendTransaction({
         to: recipientAddress,
-        value: ethers.utils.parseEther(amount),
+        value: ethers.parseEther(amount),
       });
       console.log(`Transaction hash: ${transaction.hash}`);
     } catch (error) {
@@ -151,5 +156,8 @@ export default function useWalletActions(senderSolPublicKey, senderEthAddress) {
   //   autoFundAccounts();
   // }, [senderSolPublicKey, senderEthAddress]);
 
-  return { solanaBalance, ethBalance, getSolanaBalance, getEthBalance, sendSolana, sendEth, airdropSol, requestSepoliaFaucet, loading };
+  return { solanaBalance, ethBalance, getSolanaBalance, getEthBalance, sendSolana, sendEth, airdropSol, loading };
 }
+
+export { useWalletActions };
+
