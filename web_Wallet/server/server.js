@@ -23,7 +23,7 @@ console.log(authRoutes)
 
 
 app.use('/api/auth',authRoutes)
-app.use('/api/dashboard',dashboardRoutes)
+// app.use('/api/dashboard',dashboardRoutes)
 
 console.log(process.env.PORT)
 

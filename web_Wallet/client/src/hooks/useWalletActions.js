@@ -18,10 +18,10 @@ export const decryptPrivateKey = (encryptedPrivateKey, hashedPassword, saltForKe
   return decrypted;
 };
 
-export const airdropSol = async (publicKey, amount = 1) => {
+export const airdropSol = async (publicKey, amount) => {
   // setLoading(true);
   try {
-    const signature = await solConnection.requestAirdrop(new PublicKey(publicKey), 1e9);
+    const signature = await solConnection.requestAirdrop(new PublicKey(publicKey), amount * LAMPORTS_PER_SOL);
     const latestBlockhash = await solConnection.getLatestBlockhash();
     await solConnection.confirmTransaction({
       signature,
