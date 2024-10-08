@@ -26,7 +26,7 @@ const handleSubmit = async (e) => {
   
         if (response.ok) {
           localStorage.setItem('authToken', data.token);
-          toast.success('Login successful!');
+          // toast.success('Login successful!');
           setTimeout(() => navigate('/'), 2000);
           <Loader size="medium" color="white" />
           // navigate('/'); 

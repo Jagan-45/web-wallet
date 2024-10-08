@@ -4,6 +4,9 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 
 export default defineConfig({
+  build: {
+    outDir: 'dist'
+  }, 
   plugins: [react()],
   optimizeDeps: {
     esbuildOptions: {

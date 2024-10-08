@@ -41,7 +41,7 @@ export default function Signup() {
         localStorage.setItem('encryptedMnemonic', data.encryptedMnemonic);
         localStorage.setItem('encryptedSeed', data.encryptedSeed);
         localStorage.setItem('iv', data.iv);
-        toast.success('Registration successful!');
+        // toast.success('Registration successful!');
         setTimeout(() => navigate('/seed'), 2000);
       } else {
         toast.error('Registration failed: ' + data.message);

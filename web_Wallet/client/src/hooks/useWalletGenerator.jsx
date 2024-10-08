@@ -2,7 +2,7 @@ import { useState } from 'react';
 import nacl from 'tweetnacl';
 import { derivePath } from 'ed25519-hd-key';
 import { Keypair } from '@solana/web3.js';
-import { ethers } from 'ethers';
+import { ethers, Mnemonic } from 'ethers';
 import crypto from 'crypto'; 
 import bcrypt from 'bcryptjs'; 
 import { Buffer } from 'buffer';
@@ -48,14 +48,18 @@ const useWalletGenerator = () => {
         encryptedPrivateKey: encryptPrivateKey(secret, key, iv),
       }));
 
-      const ethPath = `m/44'/60'/${accountIndex}'/0`;
-      const wallet = ethers.Wallet.fromPhrase(mnemonic, {path:ethPath});
+      const ethPath = `m/44'/60'/0'/0`;
+      // console.log(mnemonic)
+      const mnemonicInstance=Mnemonic.fromPhrase(mnemonic);
+      const hdNode=ethers.HDNodeWallet.fromMnemonic(mnemonicInstance,ethPath+"/"+accountIndex);
+      // const wallet = ethers.Wallet.fromPhrase(mnemonic, {path:ethPath});
+      const wallet=new ethers.Wallet(hdNode.privateKey);
       const encryptedPrivateKey = encryptPrivateKey(wallet.privateKey, key, iv);
 
-      console.log("etherium same key test")
-      console.log(ethPath)
-      console.log(wallet.address);
-      console.log(encryptPrivateKey)
+      // console.log("etherium same key test")
+      // console.log(ethPath)
+      // console.log(wallet.address);
+      // console.log(encryptPrivateKey)
 
       localStorage.setItem(`acnt${accountIndex}etherwallet`, JSON.stringify({
         publicKey: wallet.address,
