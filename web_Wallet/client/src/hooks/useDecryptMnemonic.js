@@ -20,10 +20,12 @@ const useDecryptMnemonic = (hashedPassword) => {
         if (!saltForKey || !encryptedMnemonic || !encryptedSeed || !ivHex) {
           throw new Error('Missing encrypted data or salt in local storage.');
         }
-
+       console.log("check1")
         const iv = new Uint8Array(ivHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+        console.log("check2")
 
         const key = crypto.pbkdf2Sync(hashedPassword, saltForKey, 10000, 16, 'sha256'); 
+        console.log("check3")
 
         const decipherMnemonic = crypto.createDecipheriv('aes-128-cbc', key, iv); 
         let decryptedMnemonic = decipherMnemonic.update(encryptedMnemonic, 'hex', 'utf8');
