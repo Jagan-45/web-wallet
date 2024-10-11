@@ -1,5 +1,5 @@
 import { useState} from 'react'
-import { useNavigate } from 'react-router'
+import { Navigate, useNavigate } from 'react-router'
 import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react'
 import { toast } from 'react-toastify'
 import Loader from './Loader'
@@ -28,7 +28,8 @@ const handleSubmit = async (e) => {
         if (response.ok) {
           localStorage.setItem('authToken', data.token);
           // toast.success('Login successful!');
-          setTimeout(() => navigate('/'), 2000);
+          setTimeout(() => navigate('/'), 1000);
+          
           <Loader size="medium" color="white" />
           // navigate('/'); 
         } else {

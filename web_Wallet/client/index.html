@@ -7,6 +7,12 @@
     <title>J Wallet</title>
   </head>
   <body>
+    <script>
+      window.process = {
+        browser: true,
+        env: {}
+      };
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

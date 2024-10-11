@@ -3,13 +3,20 @@ import { useState, useEffect } from 'react';
 const useAuth = ()=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
    const [loading, setLoading] = useState(true);
+   const [hasAccount, setHasAccount] = useState(true);
 
    useEffect(()=>{
 
     const fetchProtectedData = async ()=>{
         const token = localStorage.getItem('authToken');
+        const hashedPassword = localStorage.getItem('hashedPassword');
+        if(!hashedPassword){
+            setHasAccount(false);
+            setLoading(false);
+            return;
+        }
         if(!token){
-            console.log(token)
+            // console.log(token)
             setLoading(false);
             return;
         }
@@ -40,7 +47,7 @@ const useAuth = ()=>{
 
    },[])
 
-   return {isAuthenticated,loading};
+   return {isAuthenticated,loading,hasAccount};
 }
 
 export default useAuth;

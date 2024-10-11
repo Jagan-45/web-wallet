@@ -52,7 +52,8 @@ const useWalletGenerator = () => {
       // console.log(mnemonic)
       const mnemonicInstance=Mnemonic.fromPhrase(mnemonic);
       const hdNode=ethers.HDNodeWallet.fromMnemonic(mnemonicInstance,ethPath+"/"+accountIndex);
-      // const wallet = ethers.Wallet.fromPhrase(mnemonic, {path:ethPath});
+      // const wallet = ethers.Wallet.fromPhrase(mnemonic, {path:ethPath});import { on } from 'events'
+
       const wallet=new ethers.Wallet(hdNode.privateKey);
       const encryptedPrivateKey = encryptPrivateKey(wallet.privateKey, key, iv);
 

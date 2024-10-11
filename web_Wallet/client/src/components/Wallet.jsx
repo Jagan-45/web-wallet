@@ -3,8 +3,7 @@ import { Copy, Send, Plus, ChevronDown, X, ChevronRight } from 'lucide-react'
 import useWalletGenerator from '../hooks/useWalletGenerator'
  import useWalletActions from '../hooks/useWalletActions'
  import { decryptPrivateKey ,airdropSol,requestSepoliaFaucet} from '../hooks/useWalletActions'
-import { on } from 'events'
-import { toast } from 'react-toastify'
+
 
 const PasswordModal = ({ isOpen, onClose, onSubmit }) => {
   const [password, setPassword] = useState('')

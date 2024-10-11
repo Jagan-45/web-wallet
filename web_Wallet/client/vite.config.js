@@ -6,11 +6,12 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 export default defineConfig({
   build: {
     outDir: 'dist'
-  }, 
+  },
   plugins: [react()],
   optimizeDeps: {
     esbuildOptions: {
       define: {
+        'process.env': JSON.stringify(process.env),  // Convert process.env to string
         global: 'globalThis',
       },
       plugins: [
@@ -20,7 +21,6 @@ export default defineConfig({
         }),
         NodeModulesPolyfillPlugin(),
       ],
-   
     },
   },
   resolve: {

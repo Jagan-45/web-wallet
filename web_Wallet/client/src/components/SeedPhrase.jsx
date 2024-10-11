@@ -8,11 +8,14 @@ import { useNavigate } from 'react-router-dom';
 
 export default function SeedPhrase() {
   const hashedPassword = localStorage.getItem('hashedPassword');
+  console.log(hashedPassword)
   const { loading, decryptedData, error } = useDecryptMnemonic(hashedPassword);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const navigate = useNavigate();
-  // console.log(decryptedData)
+   console.log(decryptedData)
+  console.log("Error from decryptic mnemonic")
+   console.log(error)
   const seedPhrase=decryptedData.decryptedMnemonic;
 
   const handleSubmit = () => {

@@ -25,7 +25,7 @@ export default function Signup() {
     }
     console.log('hello')
     try {
-      console.log('block')
+      // console.log('block')
       const response = await fetch('https://web-wallet-backend.onrender.com/api/auth/register', {
         // mode:'no-cors',
         method: 'POST',

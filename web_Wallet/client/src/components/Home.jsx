@@ -6,7 +6,7 @@ import Loader from './Loader';
 import Login from './Login';
 
 const Home = () => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading,hasAccount } = useAuth();
   console.log(isAuthenticated)
 
   if (loading) {
@@ -19,7 +19,7 @@ const Home = () => {
     )
   }
 
-  return isAuthenticated ? <Wallet /> : <Login/>;
+  return (hasAccount ? isAuthenticated ? <Wallet /> : <Navigate to="/login"/> : <Navigate to="/signup"/>);
 };
 
 export default Home;

@@ -10,10 +10,12 @@ const useDecryptMnemonic = (hashedPassword) => {
   const encryptedMnemonic = localStorage.getItem('encryptedMnemonic');
   const encryptedSeed = localStorage.getItem('encryptedSeed');
   const ivHex = localStorage.getItem('iv');
+  console.log(saltForKey, encryptedMnemonic, encryptedSeed, ivHex)
   
   useEffect(() => {
     const decryptMnemonicAndSeed = () => {
       try {
+        console.log("inside from function decryptmenomicandseed")
         if (!saltForKey || !encryptedMnemonic || !encryptedSeed || !ivHex) {
           throw new Error('Missing encrypted data or salt in local storage.');
         }
@@ -25,6 +27,9 @@ const useDecryptMnemonic = (hashedPassword) => {
         const decipherMnemonic = crypto.createDecipheriv('aes-128-cbc', key, iv); 
         let decryptedMnemonic = decipherMnemonic.update(encryptedMnemonic, 'hex', 'utf8');
         decryptedMnemonic += decipherMnemonic.final('utf8');
+
+        console.log("------------------------------------------------------------")
+        console.log(decipherMnemonic)
 
         const decipherSeed = crypto.createDecipheriv('aes-128-cbc', key, iv); 
         let decryptedSeed = decipherSeed.update(encryptedSeed, 'hex', 'utf8');
@@ -39,6 +44,8 @@ const useDecryptMnemonic = (hashedPassword) => {
     };
 
     decryptMnemonicAndSeed();
+    console.log("Decrypted mneomic is: ")
+    console.log(decryptedData.decryptedMnemonic)
   }, [hashedPassword, saltForKey, encryptedMnemonic, encryptedSeed, ivHex]);
 
   return { loading, decryptedData, error };
