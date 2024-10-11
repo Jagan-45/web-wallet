@@ -37,6 +37,8 @@ const useDecryptMnemonic = (hashedPassword) => {
 
         setDecryptedData({ decryptedMnemonic: decryptedMnemonic.split(' '), decryptedSeed });
       } catch (error) {
+        console.log("error in try block")
+        console.log(error)
         setError(error.message);
       } finally {
         setIsLoading(false);
