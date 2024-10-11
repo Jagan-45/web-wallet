@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import crypto from 'crypto-browserify';
-
+import { Buffer } from 'buffer';
 const useDecryptMnemonic = (hashedPassword) => {
   const [loading, setIsLoading] = useState(true);
   const [decryptedData, setDecryptedData] = useState({ decryptedMnemonic: null, decryptedSeed: null });
