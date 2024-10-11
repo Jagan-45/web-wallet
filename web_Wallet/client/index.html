@@ -8,6 +8,8 @@
   </head>
   <body>
     <script>
+      import {Buffer} from 'buffer';
+      globalThis.Buffer = Buffer;
       window.process = {
         browser: true,
         env: {}
