@@ -11,7 +11,7 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        'process.env': JSON.stringify(process.env),  // Convert process.env to string
+        'process.env': JSON.stringify(process.env),  
         global: 'globalThis',
       },
       plugins: [
