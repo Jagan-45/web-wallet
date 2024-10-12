@@ -16,23 +16,23 @@ const useDecryptMnemonic = (hashedPassword) => {
   useEffect(() => {
     const decryptMnemonicAndSeed = () => {
       try {
-        console.log("inside from function decryptmenomicandseed")
+        // console.log("inside from function decryptmenomicandseed")
         if (!saltForKey || !encryptedMnemonic || !encryptedSeed || !ivHex) {
           throw new Error('Missing encrypted data or salt in local storage.');
         }
-       console.log("check1")
+      //  console.log("check1")
         const iv = new Uint8Array(ivHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-        console.log("check2")
+        // console.log("check2")
 
         const key = crypto.pbkdf2Sync(hashedPassword, saltForKey, 10000, 16, 'sha256'); 
-        console.log("check3")
+        // console.log("check3")
 
         const decipherMnemonic = crypto.createDecipheriv('aes-128-cbc', key, iv); 
         let decryptedMnemonic = decipherMnemonic.update(encryptedMnemonic, 'hex', 'utf8');
         decryptedMnemonic += decipherMnemonic.final('utf8');
 
-        console.log("------------------------------------------------------------")
-        console.log(decipherMnemonic)
+        // console.log("------------------------------------------------------------")
+        // console.log(decipherMnemonic)
 
         const decipherSeed = crypto.createDecipheriv('aes-128-cbc', key, iv); 
         let decryptedSeed = decipherSeed.update(encryptedSeed, 'hex', 'utf8');
@@ -40,8 +40,8 @@ const useDecryptMnemonic = (hashedPassword) => {
 
         setDecryptedData({ decryptedMnemonic: decryptedMnemonic.split(' '), decryptedSeed });
       } catch (error) {
-        console.log("error in try block")
-        console.log(error)
+        // console.log("error in try block")
+        // console.log(error)
         setError(error.message);
       } finally {
         setIsLoading(false);
@@ -49,7 +49,7 @@ const useDecryptMnemonic = (hashedPassword) => {
     };
 
     decryptMnemonicAndSeed();
-    console.log("Decrypted mneomic is: ")
+    // console.log("Decrypted mneomic is: ")
     console.log(decryptedData.decryptedMnemonic)
   }, [hashedPassword, saltForKey, encryptedMnemonic, encryptedSeed, ivHex]);
 

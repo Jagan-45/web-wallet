@@ -23,7 +23,7 @@ export default function Signup() {
       toast.error("Passwords don't match!");
       return;
     }
-    console.log('hello')
+    // console.log('hello')
     try {
       // console.log('block')
       const response = await fetch('https://web-wallet-backend.onrender.com/api/auth/register', {
@@ -35,7 +35,7 @@ export default function Signup() {
         body: JSON.stringify({ password: password, confirmPassword: confirmPassword }),
       });
       const data = await response.json();
-      console.log(data)
+      // console.log(data)
       if (response.ok) {
         localStorage.setItem('hashedPassword', data.hashedPassword);
         localStorage.setItem('saltForKey', data.saltForKey);
